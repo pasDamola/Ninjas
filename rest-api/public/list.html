@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ninjago</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googpleapis.com/css?family=Raleway">
+    <link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
+
+</head>
+
+<body>
+    <h1 class="title">Ninjago - a Ninja REST API</h1>
+    <div id="homepage">
+        <h1>List of registered ninjas!</h1>
+        <div id="ninjas"></div>
+    </div>
+
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- Create React Component -->
+
+    <script type="text/babel">
+      var NinjaList = React.createClass({
+
+          getInitialState: function(){
+              return({
+                  ninjas: []
+              });
+          },
+          render: function() {
+              var ninjas = this.state.ninjas;
+              ninjas = ninjas.map(function(ninja, index){
+              console.log(ninjas);
+                return(
+                    <li key={index}>
+                      <span className={ninja.available}></span>
+                      <span className="name">{ninja.name}</span>
+                      <span className="rank">{ninja.rank}</span>
+                    </li>
+                );
+              });
+              return(
+                  <div id="ninja-container">
+                    <button type="button" onClick={this.getNinjas}>Get ninjas</button>
+                   <ul>{ninjas}</ul>
+                  </div>
+              );
+          },
+
+          getNinjas : function(e){
+              e.preventDefault();
+              this.style = 'none';
+              fetch('/api/ninjas').then(function(data){
+                  return data.json();
+              }).then(json => {
+                  this.setState({
+                      ninjas : json
+                  });
+              });
+          }
+      });
+
+      ReactDOM.render(<NinjaList />, document.getElementById('ninjas'));
+    </script>
+</body>
+
+</html>
