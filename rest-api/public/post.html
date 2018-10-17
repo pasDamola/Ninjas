@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ninjago</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googpleapis.com/css?family=Raleway">
+    <link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
+
+</head>
+
+<body>
+    <h1 class="title">Ninjago - a Ninja REST API</h1>
+    <div id="homepage">
+        <h1>Create a ninja!</h1>
+        <div id="ninjas"></div>
+    </div>
+
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- Create React Component -->
+
+    <script type="text/babel">
+      var Newninja = React.createClass({
+          render: function() {
+              return(
+                  <div id="ninja-container">
+                    <form id="search" onSubmit={this.handleSubmit}>
+                      <label>Enter your Name:</label>
+                      <input type="text" ref="name" placeholder="Name" required />
+                      <label>Enter your Rank:</label>
+                      <input type="text" ref="rank" placeholder="Rank" required />
+                      <input type="submit" value="Create Ninja" />
+                   </form>
+                  </div>
+              );
+          },
+
+          handleSubmit : function(e){
+              e.preventDefault();
+              var name = this.refs.name.value;
+              var rank = this.refs.rank.value;
+
+              axios.post('/api/ninjas',{
+                name,
+                rank
+            })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+          }
+      });
+
+      ReactDOM.render(<Newninja />, document.getElementById('ninjas'));
+    </script>
+</body>
+
+</html>
